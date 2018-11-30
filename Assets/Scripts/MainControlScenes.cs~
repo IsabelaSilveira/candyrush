@@ -1,0 +1,36 @@
+﻿using UnityEngine;
+using System.Collections;
+using UnityEngine.UI;
+
+public class MainControlScenes : MonoBehaviour {
+
+	public GameObject player;
+	public GameObject bigBoss;
+	public Transform startPoint;
+	private Vector3 positionStartPoint;
+	private Vector3 positionBigBoss;
+	private Vector3 positionCanvas;
+	private Vector3 positionPlayer;
+
+	public Slider StaminaBar;
+
+	void Awake()
+	{
+		positionStartPoint = new Vector3(-5,0,0);
+		positionBigBoss = new Vector3(-9,1.4f,0);
+		positionPlayer = new Vector3(0,3,0);
+	}
+	// Use this for initialization
+	void Start () 
+	{
+		Instantiate(startPoint,positionStartPoint,startPoint.transform.rotation);
+		Instantiate(bigBoss,positionBigBoss,bigBoss.transform.rotation);
+		Instantiate(player,positionPlayer, player.transform.rotation);
+	}
+	
+	// Update is called once per frame
+	void Update () 
+	{
+		StaminaBar.value = Move.stamina;
+	}
+}
