@@ -69,7 +69,7 @@ public class GameMaster : MonoBehaviour
 				var barraca = Instantiate (Resources.Load ("Prefabs/plataforms/Barraca doces"), plataforma.transform.position + new Vector3 (0f, 4.8f, 1f), Quaternion.identity);
 				break;
 			}
-		}
+		} 
 	}
 
 	private void attribRandom (Button b)
