@@ -79,7 +79,7 @@ public class PlataformGenerator: MonoBehaviour
 					if (!(plataforma.transform.position.x == 666 && plataforma.transform.position.y == 666 && plataforma.transform.position.z == 666))
 						plataforma.GetComponent<Rigidbody> ().velocity = new Vector3 (-speed, plataforma.GetComponent<Rigidbody> ().velocity.y, 0f);
 
-					if (plataforma.transform.position.x < -50f || plataforma.transform.position.y < -20f) {
+					if (plataforma.transform.position.x < -90f || plataforma.transform.position.y < -20f) {
 						if (plataforma.name.StartsWith ("Plat") && plataforma.GetComponent<BoxCollider> ().enabled == false) {
 							Destroy (plataforma);
 						} else {
