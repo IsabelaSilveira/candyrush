@@ -75,7 +75,7 @@ public class GameMaster : MonoBehaviour
 	private void attribRandom (Button b)
 	{
 		obstaculos--;
-        countText.text = 40 - obstaculos + " ";
+        countText.text = "" + obstaculos;
 		if (obstaculos < 4) {
 			Destroy (b.gameObject);
 			return;
