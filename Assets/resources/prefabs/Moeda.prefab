@@ -218,7 +218,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bb4f6a30f6e34b45b9c8b8d4031886a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flip: 0
   flipped: 0
+  force: {x: 0, y: 0, z: 0}
+  torque: {x: 0, y: 0, z: 0}
   result: 
 --- !u!54 &4215940753417336407
 Rigidbody:
@@ -268,7 +271,7 @@ MonoBehaviour:
     i14: 0
     i15: 0
   m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
+  m_LocalPlayerAuthority: 1
 --- !u!114 &6004898877700334504
 MonoBehaviour:
   m_ObjectHideFlags: 0

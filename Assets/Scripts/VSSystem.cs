@@ -44,7 +44,7 @@ public class VSSystem : MonoBehaviour
 				PlataformGenerator.GameOver.SetActive (true);
 			}
 		}
-		if (randomMonster && Random.value < 0.03f) {
+		if (randomMonster && Random.value < 0.01f) {
 			GameMaster.instance.obstaculos--;
 			if (Random.value < 0.1) {
 				GameMaster.dropPlataform ();

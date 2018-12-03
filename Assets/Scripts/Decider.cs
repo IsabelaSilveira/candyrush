@@ -2,34 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
 
-public class Decider : MonoBehaviour
+public class Decider : NetworkBehaviour
 {
 	public GameObject coin;
-	public string choice;
-	public string caraCoroa;
 	private bool decided = false;
 	public GameObject CCpanel;
-	//private NetworkPlayer thisOne;
+	private NetworkPlayer thisOne;
 
 	// Update is called once per frame
 	void Update ()
 	{
-		/*if (!thisOne) {
+		if (!thisOne) {
 			foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {
 				if (nPlayer.GetComponent<NetworkPlayer> ().isLocalPlayer) {
 					thisOne = nPlayer.GetComponent<NetworkPlayer> ();
 				}
 			}
-		} else */{
-			/*if (thisOne.caraCoroa != "") {
+		} else {
+			if (thisOne.caraCoroa != "") {
 				coin.SetActive (true);
-			}*/
+			}
 			if (coin.activeSelf && coin.GetComponent<CoinSpin> ().result != "") {
-				if (coin.GetComponent<CoinSpin> ().result == caraCoroa) {
-					PlayerPrefs.SetString ("Mode", choice);
+				if (coin.GetComponent<CoinSpin> ().result == thisOne.caraCoroa) {
+					PlayerPrefs.SetString ("Mode", thisOne.choice);
 				} else {
-					if (choice == "Walker") {
+					if (thisOne.choice == "Walker") {
 						PlayerPrefs.SetString ("Mode", "Meddler");
 					} else {
 						PlayerPrefs.SetString ("Mode", "Walker");
@@ -45,14 +44,14 @@ public class Decider : MonoBehaviour
 	{
 		decided = true;
 		yield return new WaitForSeconds (2);
-		//thisOne.play ();
+		// thisOne.play ();
 		SceneManager.LoadSceneAsync ("qwer");
 
 	}
 
 	public void CaraCoroa (string cc)
 	{
-		caraCoroa = cc;
+		thisOne.caraCoroa = cc;
 		foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {
 			if (!nPlayer.GetComponent<NetworkPlayer> ().isLocalPlayer) {
 				if (cc == "Cara") {
@@ -66,22 +65,17 @@ public class Decider : MonoBehaviour
 
 	public void Choice (string c)
 	{
-		choice = c;
-//		float min = Mathf.Infinity;
-//		foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {
-//			Debug.Log (nPlayer.name);
-//			min = nPlayer.GetComponent<NetworkPlayer> ().playerControllerId;
-//			break;
-//		}
-//		foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {
-//			if (nPlayer.GetComponent<NetworkPlayer> ().playerControllerId < min) {
-//				min = nPlayer.GetComponent<NetworkPlayer> ().playerControllerId;
-//			}
-//		}
-//		foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {
-//			if (nPlayer.GetComponent<NetworkPlayer> ().isLocalPlayer && nPlayer.GetComponent<NetworkPlayer> ().playerControllerId == min) {
+		thisOne.choice = c;
+		float min = Mathf.Infinity;
+		foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {
+			if (nPlayer.GetComponent<NetworkPlayer> ().playerControllerId < min) {
+				min = nPlayer.GetComponent<NetworkPlayer> ().playerControllerId;
+			}
+		}
+		foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {
+			if (nPlayer.GetComponent<NetworkPlayer> ().isLocalPlayer && nPlayer.GetComponent<NetworkPlayer> ().playerControllerId == min) {
 				CCpanel.SetActive (true);
-//			}
-//		}
+			}
+		}
 	}
 }
