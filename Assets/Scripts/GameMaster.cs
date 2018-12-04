@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
-public class GameMaster : MonoBehaviour
+public class GameMaster : NetworkBehaviour
 {
 	public static bool active = false;
 	public Button[] buttons;
 	public int obstaculos = 44;
 	public static GameMaster instance;
-    public Text countText;
+	public Text countText;
 
 	// Start is called before the first frame update
 	void Start ()
@@ -25,19 +26,29 @@ public class GameMaster : MonoBehaviour
 	{
 		if (obstaculos <= 0) {
 			PlataformGenerator.GameOver.SetActive (true);
-			PlataformGenerator.GameOver.transform.rotation = Quaternion.Euler(new Vector3 (0f,90f,0f));
+			PlataformGenerator.GameOver.transform.rotation = Quaternion.Euler (new Vector3 (0f, 90f, 0f));
 			PlataformGenerator.GameOver.transform.position = new Vector3 (PlataformGenerator.GameOver.transform.position.x, PlataformGenerator.GameOver.transform.position.y, -7.2f);
 		}
 	}
 
 	public static void spawnMonster (int n)
 	{
-		var temp = Instantiate (Resources.Load ("Prefabs/characters/Monster" + n) as GameObject, PlataformGenerator.EndPosition + new Vector3 (-3f, 5f, 0f), Quaternion.identity) as GameObject;
+		foreach (var plataforma in GameObject.FindGameObjectsWithTag("Plataforma")) {
+			if ((plataforma.transform.position.x > 60 && plataforma.transform.position.x < 60 + PlataformGenerator.speed / 2) && plataforma.name.StartsWith ("Plat")) { 
+				NetworkServer.Spawn (Instantiate (Resources.Load ("Prefabs/characters/Monster" + n) as GameObject, PlataformGenerator.EndPosition + new Vector3 (-3f, 5f, 0f), Quaternion.identity) as GameObject);
+				break;
+			}
+		}
 	}
 
 	public static void spawnPowerUp (string powerUp)
 	{
-		var temp = Instantiate (Resources.Load ("Prefabs/plataforms/Power Up " + powerUp) as GameObject, PlataformGenerator.EndPosition + new Vector3 (-3f, 5f, 0f), Quaternion.identity) as GameObject;
+		foreach (var plataforma in GameObject.FindGameObjectsWithTag("Plataforma")) {
+			if ((plataforma.transform.position.x > 60 && plataforma.transform.position.x < 60 + PlataformGenerator.speed / 2) && plataforma.name.StartsWith ("Plat")) {
+				NetworkServer.Spawn (Instantiate (Resources.Load ("Prefabs/plataforms/Power Up " + powerUp) as GameObject, PlataformGenerator.EndPosition + new Vector3 (-3f, 5f, 0f), Quaternion.identity) as GameObject);
+				break;
+			}
+		}
 	}
 
 	public static void dropPlataform ()
@@ -66,7 +77,7 @@ public class GameMaster : MonoBehaviour
 	{
 		foreach (var plataforma in GameObject.FindGameObjectsWithTag("Plataforma")) {
 			if ((plataforma.transform.position.x > 60 && plataforma.transform.position.x < 60 + PlataformGenerator.speed / 2) && plataforma.name.StartsWith ("Plat")) {
-				var barraca = Instantiate (Resources.Load ("Prefabs/plataforms/Barraca doces"), plataforma.transform.position + new Vector3 (0f, 4.8f, 1f), Quaternion.identity);
+				NetworkServer.Spawn (Instantiate (Resources.Load ("Prefabs/plataforms/Barraca doces"), plataforma.transform.position + new Vector3 (0f, 4.8f, 1f), Quaternion.identity) as GameObject);
 				break;
 			}
 		} 
@@ -75,7 +86,7 @@ public class GameMaster : MonoBehaviour
 	private void attribRandom (Button b)
 	{
 		obstaculos--;
-        countText.text = "" + obstaculos;
+		countText.text = "" + obstaculos;
 		if (obstaculos < 4) {
 			Destroy (b.gameObject);
 			return;
@@ -83,7 +94,7 @@ public class GameMaster : MonoBehaviour
 		Image img = b.gameObject.GetComponent<Image> ();
 		b.onClick.RemoveAllListeners ();
 		b.onClick.AddListener (() => attribRandom (b));
-		Texture2D[] textures = {null,null,null,null,null,null};
+		Texture2D[] textures = { null, null, null, null, null, null };
 		textures [0] = Resources.Load ("Icons_barraca") as Texture2D;
 		textures [1] = Resources.Load ("Icons_fantasma") as Texture2D;
 		textures [2] = Resources.Load ("Icons_mola") as Texture2D;

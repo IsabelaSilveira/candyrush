@@ -33,6 +33,7 @@ public class VSSystem : MonoBehaviour
 			}
 			PlataformGenerator.GameOver.SetActive (true);
 		}
+		/*
 		if (randomJump && Random.value < 0.005f) {
 			PlataformGenerator.Player.gameObject.GetComponent<PlayerController> ().jump ();
 			if (PlataformGenerator.Player.transform.position.x < -35f || PlataformGenerator.Player.transform.position.y < -20f) {
@@ -65,10 +66,10 @@ public class VSSystem : MonoBehaviour
 					break;
 				}
 			}
-		}
+		}*/
 
-		meddlerScore.text = (150 * Score.despawned + (PlataformGenerator.GameOver.activeSelf ? 1000 : 0)).ToString ();
-		walkerScore.text = (10 * Score.despawned + 200 * Score.died).ToString ();
+		meddlerScore.text = (150 * Score.despawned + 200 * Score.powerUp).ToString ();
+		walkerScore.text = (10 * Score.despawned + 200 * Score.died + 50 * Score.powerUp).ToString ();
 	}
 
 	void WalkerMode ()

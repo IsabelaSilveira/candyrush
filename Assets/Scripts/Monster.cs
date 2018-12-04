@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Monster : MonoBehaviour {
+public class Monster : MonoBehaviour
+{
 
 	public int HP;
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+	{
 		HP = Random.Range (1, 5);
 		/*if (this.gameObject.name.StartsWith ("Monster1")) {
 			HP = 6;
@@ -15,7 +17,8 @@ public class Monster : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+	{
 		if (HP <= 0) {
 			this.gameObject.GetComponent<SphereCollider> ().isTrigger = true;
 			Score.died += 1;
@@ -33,7 +36,10 @@ public class Monster : MonoBehaviour {
 		}*/
 	}
 
-	void OnMouseDown () {
+	void OnMouseDown ()
+	{
+		if (HP == 1)
+			Score.died += 1;
 		PlataformGenerator.Player.GetComponent<PlayerController> ().laserSound ();
 		GameObject pew = Instantiate (Resources.Load ("Prefabs/characters/Pew") as GameObject, PlataformGenerator.Player.transform.position, Quaternion.identity) as GameObject;
 		pew.gameObject.GetComponent<Pew> ().target = this.gameObject;

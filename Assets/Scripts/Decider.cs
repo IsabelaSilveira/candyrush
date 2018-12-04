@@ -10,10 +10,20 @@ public class Decider : NetworkBehaviour
 	private bool decided = false;
 	public GameObject CCpanel;
 	private NetworkPlayer thisOne;
+	private GameObject canvas;
 
 	// Update is called once per frame
+	void Start (){
+		canvas = GameObject.FindObjectOfType<Canvas> ().gameObject;
+	}
+
 	void Update ()
 	{
+		if (GameObject.FindGameObjectsWithTag ("NetPlayer").Length != 2) {
+			canvas.SetActive (false);
+		} else {
+			canvas.SetActive (true);
+		}
 		if (!thisOne) {
 			foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {
 				if (nPlayer.GetComponent<NetworkPlayer> ().isLocalPlayer) {
@@ -29,8 +39,10 @@ public class Decider : NetworkBehaviour
 					PlayerPrefs.SetString ("Mode", thisOne.choice);
 				} else {
 					if (thisOne.choice == "Walker") {
+						thisOne.choice = "Meddler";
 						PlayerPrefs.SetString ("Mode", "Meddler");
 					} else {
+						thisOne.choice = "Walker";
 						PlayerPrefs.SetString ("Mode", "Walker");
 					}
 				}
@@ -45,7 +57,7 @@ public class Decider : NetworkBehaviour
 		decided = true;
 		yield return new WaitForSeconds (2);
 		// thisOne.play ();
-		SceneManager.LoadSceneAsync ("qwer");
+		NetworkManager.singleton.ServerChangeScene ("qwer");
 
 	}
 

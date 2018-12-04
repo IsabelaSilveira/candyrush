@@ -2,9 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
 using UnityEditor;
 
-public class PlataformGenerator: MonoBehaviour
+public class PlataformGenerator: NetworkBehaviour
 {
 
 	public Transform StartPlataformGenerator;
@@ -26,15 +27,16 @@ public class PlataformGenerator: MonoBehaviour
 	void Start ()
 	{
 		instance = this;
-		NewPlataform = Instantiate (Resources.Load ("Prefabs/plataforms/Plat1") as GameObject, StartPlataformGenerator.position, Quaternion.identity) as GameObject;
-		NewBackground = Instantiate (Resources.Load ("Prefabs/plataforms/Bg1") as GameObject, StartPlataformGenerator.position, Quaternion.identity) as GameObject;
-		Player = Instantiate (Resources.Load ("Prefabs/characters/"+ PlayerPrefs.GetString("Skin" ,"Player1")) as GameObject, StartPlataformGenerator.position + new Vector3 (0, 5f, 0f), Quaternion.identity) as GameObject;
+		NetworkServer.Spawn (NewPlataform = Instantiate (Resources.Load ("Prefabs/plataforms/Plat1") as GameObject, StartPlataformGenerator.position, Quaternion.identity) as GameObject);
+		NetworkServer.Spawn (NewBackground = Instantiate (Resources.Load ("Prefabs/plataforms/Bg1") as GameObject, StartPlataformGenerator.position, Quaternion.identity) as GameObject);
+		NetworkServer.Spawn (Player = Instantiate (Resources.Load ("Prefabs/characters/" + PlayerPrefs.GetString ("Skin", "Player1")) as GameObject, StartPlataformGenerator.position + new Vector3 (0, 5f, 0f), Quaternion.identity) as GameObject);
 		GameOver = GameObject.Find ("GameOver");
 		GameOver.SetActive (false);
 		speed = 10f;
+		NetworkManager.singleton.gameObject.GetComponent<NetworkManagerHUD> ().showGUI = false;
 	}
 
-	void FixedUpdate ()
+	void Update ()
 	{
 		if (!PlataformGenerator.GameOver.activeSelf) {
 			try {
@@ -52,7 +54,7 @@ public class PlataformGenerator: MonoBehaviour
 						NewPlataform.tag = "Plataforma";
 						NewPlataform.transform.position = EndPosition;
 					} else
-						NewPlataform = Instantiate (newPlataform (n), EndPosition, Quaternion.identity) as GameObject;
+						NetworkServer.Spawn (NewPlataform = Instantiate (newPlataform (n), EndPosition, Quaternion.identity) as GameObject);
 				}
 
 				ChildCount = NewBackground.transform.childCount;
@@ -72,7 +74,7 @@ public class PlataformGenerator: MonoBehaviour
 						NewBackground.tag = "Plataforma";
 						NewBackground.transform.position = BgEndPosition;
 					} else
-						NewBackground = Instantiate (newBackground (n), BgEndPosition, Quaternion.identity) as GameObject;
+						NetworkServer.Spawn (NewBackground = Instantiate (newBackground (n), BgEndPosition, Quaternion.identity) as GameObject);
 				}
 
 				foreach (var plataforma in GameObject.FindGameObjectsWithTag("Plataforma")) {
@@ -159,7 +161,8 @@ public class PlataformGenerator: MonoBehaviour
 			}
 		}
 		if (target != NewPlataform) {
-			GameObject pew = Instantiate (Resources.Load ("Prefabs/characters/Pew") as GameObject, Player.transform.position, Quaternion.identity) as GameObject;
+			GameObject pew;
+			NetworkServer.Spawn (pew = Instantiate (Resources.Load ("Prefabs/characters/Pew") as GameObject, Player.transform.position, Quaternion.identity) as GameObject);
 			PlataformGenerator.Player.GetComponent<PlayerController> ().laserSound ();
 			pew.gameObject.GetComponent<Pew> ().target = target;
 			Debug.Log (pew.gameObject.GetComponent<Pew> ().target.gameObject.GetComponent<Monster> ().HP);

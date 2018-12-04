@@ -28,6 +28,7 @@ public class PowerUp : MonoBehaviour
 			default:
 				break;
 			}
+			Score.powerUp++;
 			var ChildCount = this.transform.childCount;
 			for (int i = 0; i < ChildCount; i++) {
 				if (this.transform.GetChild (i).name == "Brilho") {
