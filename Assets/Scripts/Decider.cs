@@ -39,10 +39,10 @@ public class Decider : NetworkBehaviour
 					PlayerPrefs.SetString ("Mode", thisOne.choice);
 				} else {
 					if (thisOne.choice == "Walker") {
-						thisOne.choice = "Meddler";
+						thisOne.CmdTakeChoice("Meddler");
 						PlayerPrefs.SetString ("Mode", "Meddler");
 					} else {
-						thisOne.choice = "Walker";
+						thisOne.CmdTakeChoice("Walker");
 						PlayerPrefs.SetString ("Mode", "Walker");
 					}
 				}
@@ -63,13 +63,13 @@ public class Decider : NetworkBehaviour
 
 	public void CaraCoroa (string cc)
 	{
-		thisOne.caraCoroa = cc;
+		thisOne.CmdTakeCaraCoroa(cc);
 		foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {
 			if (!nPlayer.GetComponent<NetworkPlayer> ().isLocalPlayer) {
 				if (cc == "Cara") {
-					nPlayer.GetComponent<NetworkPlayer> ().caraCoroa = "Coroa";
+					nPlayer.GetComponent<NetworkPlayer> ().CmdTakeCaraCoroa ("Coroa");
 				} else {
-					nPlayer.GetComponent<NetworkPlayer> ().caraCoroa = "Cara";
+					nPlayer.GetComponent<NetworkPlayer> ().CmdTakeCaraCoroa("Cara");
 				}
 			}
 		}
@@ -77,7 +77,7 @@ public class Decider : NetworkBehaviour
 
 	public void Choice (string c)
 	{
-		thisOne.choice = c;
+		thisOne.CmdTakeChoice(c);
 		float min = Mathf.Infinity;
 		foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {
 			if (nPlayer.GetComponent<NetworkPlayer> ().playerControllerId < min) {

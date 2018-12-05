@@ -5,20 +5,30 @@ using UnityEngine.Networking;
 
 public class NetworkPlayer : NetworkBehaviour
 {
-	[SyncVar]
-	public string choice = "";
-	[SyncVar]
-	public string caraCoroa = "";
+	public string choice { get; private set; }
+	public string caraCoroa { get; private set; }
 
     // Start is called before the first frame update
     void Start()
-    {
-    DontDestroyOnLoad(this.gameObject);
+	{
+		choice = "";
+		caraCoroa = "";
+    	DontDestroyOnLoad(this.gameObject);
     }
 
     // Update is called once per frame
     void Update()
     {
         
-    }
+	}
+
+	[Command]
+	public void CmdTakeChoice(string s){
+		choice = s;
+	}
+
+	[Command]
+	public void CmdTakeCaraCoroa(string s){
+		caraCoroa = s;
+	}
 }

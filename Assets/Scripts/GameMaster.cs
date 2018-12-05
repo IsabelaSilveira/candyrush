@@ -31,7 +31,8 @@ public class GameMaster : NetworkBehaviour
 		}
 	}
 
-	public static void spawnMonster (int n)
+	[ClientRpc]
+	public void RpcSpawnMonster (int n)
 	{
 		foreach (var plataforma in GameObject.FindGameObjectsWithTag("Plataforma")) {
 			if ((plataforma.transform.position.x > 60 && plataforma.transform.position.x < 60 + PlataformGenerator.speed / 2) && plataforma.name.StartsWith ("Plat")) { 
@@ -41,7 +42,8 @@ public class GameMaster : NetworkBehaviour
 		}
 	}
 
-	public static void spawnPowerUp (string powerUp)
+	[ClientRpc]
+	public void RpcSpawnPowerUp (string powerUp)
 	{
 		foreach (var plataforma in GameObject.FindGameObjectsWithTag("Plataforma")) {
 			if ((plataforma.transform.position.x > 60 && plataforma.transform.position.x < 60 + PlataformGenerator.speed / 2) && plataforma.name.StartsWith ("Plat")) {
@@ -51,7 +53,8 @@ public class GameMaster : NetworkBehaviour
 		}
 	}
 
-	public static void dropPlataform ()
+	[ClientRpc]
+	public void RpcDropPlataform ()
 	{
 		foreach (var plataforma in GameObject.FindGameObjectsWithTag("Plataforma")) {
 			if ((plataforma.transform.position.x > 30 && plataforma.transform.position.x < 30 + PlataformGenerator.speed / 2) && plataforma.name.StartsWith ("Plat")) {
@@ -73,7 +76,8 @@ public class GameMaster : NetworkBehaviour
 		}
 	}
 
-	public static void barracaDoce ()
+	[ClientRpc]
+	public void RpcBarracaDoce ()
 	{
 		foreach (var plataforma in GameObject.FindGameObjectsWithTag("Plataforma")) {
 			if ((plataforma.transform.position.x > 60 && plataforma.transform.position.x < 60 + PlataformGenerator.speed / 2) && plataforma.name.StartsWith ("Plat")) {
@@ -85,6 +89,7 @@ public class GameMaster : NetworkBehaviour
 
 	private void attribRandom (Button b)
 	{
+		NetworkServer.Spawn (b.gameObject);
 		obstaculos--;
 		countText.text = "" + obstaculos;
 		if (obstaculos < 4) {
@@ -104,32 +109,32 @@ public class GameMaster : NetworkBehaviour
 		Sprite spr;
 		switch (Random.Range (0, 6)) {
 		case 0:
-			b.onClick.AddListener (() => barracaDoce ());
+			b.onClick.AddListener (() => RpcBarracaDoce ());
 			spr = Sprite.Create (textures [0], new Rect (0f, 0f, textures [0].width, textures [0].height), new Vector2 (0.5f, 0.5f));
 			img.sprite = spr;
 			break;
 		case 1:
-			b.onClick.AddListener (() => spawnMonster (0));
+			b.onClick.AddListener (() => RpcSpawnMonster (0));
 			spr = Sprite.Create (textures [1], new Rect (0f, 0f, textures [1].width, textures [1].height), new Vector2 (0.5f, 0.5f));
 			img.sprite = spr;
 			break;
 		case 2:
-			b.onClick.AddListener (() => spawnPowerUp ("Jump"));
+			b.onClick.AddListener (() => RpcSpawnPowerUp ("Jump"));
 			spr = Sprite.Create (textures [2], new Rect (0f, 0f, textures [2].width, textures [2].height), new Vector2 (0.5f, 0.5f));
 			img.sprite = spr;
 			break;
 		case 3:
-			b.onClick.AddListener (() => spawnPowerUp ("Shield"));
+			b.onClick.AddListener (() => RpcSpawnPowerUp ("Shield"));
 			spr = Sprite.Create (textures [3], new Rect (0f, 0f, textures [3].width, textures [3].height), new Vector2 (0.5f, 0.5f));
 			img.sprite = spr;
 			break;
 		case 4:
-			b.onClick.AddListener (() => spawnPowerUp ("Speed"));
+			b.onClick.AddListener (() => RpcSpawnPowerUp ("Speed"));
 			spr = Sprite.Create (textures [4], new Rect (0f, 0f, textures [4].width, textures [4].height), new Vector2 (0.5f, 0.5f));
 			img.sprite = spr;
 			break;
 		case 5:
-			b.onClick.AddListener (() => dropPlataform ());
+			b.onClick.AddListener (() => RpcDropPlataform ());
 			spr = Sprite.Create (textures [5], new Rect (0f, 0f, textures [5].width, textures [5].height), new Vector2 (0.5f, 0.5f));
 			img.sprite = spr;
 			break;
