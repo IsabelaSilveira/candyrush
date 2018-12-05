@@ -9,20 +9,19 @@ public class Decider : NetworkBehaviour
 	public GameObject coin;
 	private bool decided = false;
 	public GameObject CCpanel;
+	public GameObject Cpanel;
 	private NetworkPlayer thisOne;
-	private GameObject canvas;
 
 	// Update is called once per frame
 	void Start (){
-		canvas = GameObject.FindObjectOfType<Canvas> ().gameObject;
 	}
 
 	void Update ()
 	{
 		if (GameObject.FindGameObjectsWithTag ("NetPlayer").Length != 2) {
-			canvas.SetActive (false);
+			Cpanel.SetActive (false);
 		} else {
-			canvas.SetActive (true);
+			Cpanel.SetActive (true);
 		}
 		if (!thisOne) {
 			foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {

@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class BtGameOver : MonoBehaviour {
 
 	void OnMouseDown () {
+		//Adversement.Show ();
 		SceneManager.LoadScene ("MenuInicial");
 	}
 }

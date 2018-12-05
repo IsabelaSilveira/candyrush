@@ -28,7 +28,7 @@ public class CoinSpin : NetworkBehaviour
 		foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {
 			if (voted && nPlayer.GetComponent<NetworkPlayer> ().isLocalPlayer && nPlayer.GetComponent<NetworkPlayer> ().playerControllerId == min) {
 				if (!flipped && ((Input.GetKeyDown (KeyCode.UpArrow)) || SwipeDetector.swipeValue > 0)) {
-					flip ();
+					flipping ();
 					/*this.gameObject.GetComponent<Rigidbody> ().useGravity = true;
 					this.gameObject.GetComponent<Rigidbody> ().maxAngularVelocity = Mathf.Infinity;
 					force = Vector3.up * Mathf.Max (SwipeDetector.swipeValue * 20f, 20f);
@@ -51,7 +51,7 @@ public class CoinSpin : NetworkBehaviour
 	}
 
 	//[ClientRpc]
-	private void flip(){
+	private void flipping(){
 		this.gameObject.GetComponent<Rigidbody> ().useGravity = true;
 		this.gameObject.GetComponent<Rigidbody> ().maxAngularVelocity = Mathf.Infinity;
 		force = Vector3.up * Mathf.Max (SwipeDetector.swipeValue * 20f, 20f);
