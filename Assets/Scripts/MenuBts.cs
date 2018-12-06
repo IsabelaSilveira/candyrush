@@ -9,7 +9,10 @@ public class MenuBts : MonoBehaviour
 
 	public void Jogar ()
 	{
-		SceneManager.LoadScene (scenePlay);
+		GameObject loading = Instantiate (Resources.Load ("loading") as GameObject);
+		loading.transform.SetParent (GameObject.FindObjectOfType<Canvas>().transform);
+		loading.transform.position = Vector2.zero;
+		SceneManager.LoadSceneAsync (scenePlay);
 	}
 
 	public void OpenPanel (string panel){

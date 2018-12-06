@@ -16,9 +16,10 @@ public class GameMaster : NetworkBehaviour
 	void Start ()
 	{
 		instance = this;
-		foreach (Button button in buttons) {
-			attribRandom (button);
-		}
+		if (!isServer)
+			foreach (Button button in buttons) {
+				attribRandom (button);
+			}
 	}
 
 	// Update is called once per frame

@@ -8,18 +8,18 @@ using System.Net.Sockets;
 using System.Linq;
 
 [RequireComponent (typeof(NetworkManager))]
-public class NetworkInterface : MonoBehaviour
+public class NetworkCandyUI : MonoBehaviour
 {
 	public void getIp (Text target){
 		NetworkManager.singleton.StopClient ();
 		NetworkManager.singleton.StopHost ();
-		NetworkManager.singleton.networkAddress = Dns.GetHostEntry (Dns.GetHostName ()).AddressList.FirstOrDefault (a => a.AddressFamily == AddressFamily.InterNetwork).ToString();
+		NetworkManager.singleton.networkAddress = IPManager.GetIP (ADDRESSFAM.IPv4);//Dns.GetHostEntry (Dns.GetHostName ()).AddressList.FirstOrDefault (a => a.AddressFamily == AddressFamily.InterNetwork).ToString();
 		target.text += NetworkManager.singleton.networkAddress;
 		NetworkManager.singleton.StartHost ();
 	}
 
 	public void rememberIp (InputField target){
-		target.text = PlayerPrefs.GetString ("LastIp", Dns.GetHostEntry (Dns.GetHostName ()).AddressList.FirstOrDefault (a => a.AddressFamily == AddressFamily.InterNetwork).ToString ());
+		target.text = PlayerPrefs.GetString ("LastIp", IPManager.GetIP (ADDRESSFAM.IPv4));
 	}
 
 	public void setIp (InputField target){

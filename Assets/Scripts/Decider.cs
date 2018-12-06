@@ -74,8 +74,10 @@ public class Decider : NetworkBehaviour
 	private IEnumerator QWER ()
 	{
 		decided = true;
+		GameObject loading = Instantiate (Resources.Load ("loading") as GameObject);
+		loading.transform.SetParent (GameObject.FindObjectOfType<Canvas>().transform);
+		loading.transform.position = Vector2.zero;
 		yield return new WaitForSeconds (1);
-		// thisOne.play ();
 		NetworkManager.singleton.ServerChangeScene ("qwer");
 
 	}
