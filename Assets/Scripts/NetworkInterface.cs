@@ -8,7 +8,8 @@ using UnityEngine.Networking;
 public class NetworkInterface : MonoBehaviour
 {
 	public void getIp (Text target){
-		target.text = NetworkManager.singleton.networkAddress;
+		Debug.Log ("Host pressed");
+		target.text += NetworkManager.singleton.networkAddress;
 		NetworkManager.singleton.StartHost ();
 	}
 
