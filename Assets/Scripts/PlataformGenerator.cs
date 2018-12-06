@@ -15,7 +15,7 @@ public class PlataformGenerator: NetworkBehaviour
 	GameObject NewBackground;
 	public static GameObject Player;
 	System.Random random = new System.Random ();
-	public static PlataformGenerator instance;
+	public static PlataformGenerator singleton;
 
 	int ChildCount;
 	public static Vector3 EndPosition;
@@ -24,16 +24,37 @@ public class PlataformGenerator: NetworkBehaviour
 
 	private int bg = 0;
 
+	void Awaken ()
+	{
+		if (!isServer) {
+			NetworkServer.Spawn (Instantiate (Resources.Load ("God") as GameObject));
+			NetworkServer.Spawn (Instantiate (Resources.Load ("StartPlataformGenerator") as GameObject));
+		} else {
+			if (singleton) {
+				foreach (PlataformGenerator obj in GameObject.FindObjectsOfType<PlataformGenerator>()) {
+					Destroy (this.gameObject);
+				}
+			} else {
+				foreach (PlataformGenerator obj in GameObject.FindObjectsOfType<PlataformGenerator>()) {
+					singleton = obj;
+					break;
+				}
+			}
+		}
+	}
+
 	void Start ()
 	{
-		instance = this;
-		NetworkServer.Spawn (NewPlataform = Instantiate (Resources.Load ("Prefabs/plataforms/Plat1") as GameObject, StartPlataformGenerator.position, Quaternion.identity) as GameObject);
-		NetworkServer.Spawn (NewBackground = Instantiate (Resources.Load ("Prefabs/plataforms/Bg1") as GameObject, StartPlataformGenerator.position, Quaternion.identity) as GameObject);
-		NetworkServer.Spawn (Player = Instantiate (Resources.Load ("Prefabs/characters/" + PlayerPrefs.GetString ("Skin", "Player1")) as GameObject, StartPlataformGenerator.position + new Vector3 (0, 5f, 0f), Quaternion.identity) as GameObject);
-		GameOver = GameObject.Find ("GameOver");
-		GameOver.SetActive (false);
+		StartPlataformGenerator = GameObject.Find ("StartPlataformGenerator").transform;
+		if (isServer) {
+			NetworkServer.Spawn (NewPlataform = Instantiate (Resources.Load ("Prefabs/plataforms/Plat1") as GameObject, StartPlataformGenerator.position, Quaternion.identity) as GameObject);
+			NetworkServer.Spawn (NewBackground = Instantiate (Resources.Load ("Prefabs/plataforms/Bg1") as GameObject, StartPlataformGenerator.position, Quaternion.identity) as GameObject);
+			NetworkServer.Spawn (Player = Instantiate (Resources.Load ("Prefabs/characters/" + PlayerPrefs.GetString ("Skin", "Player1")) as GameObject, StartPlataformGenerator.position + new Vector3 (0, 5f, 0f), Quaternion.identity) as GameObject);
+		} else {
+			GameOver = GameObject.Find ("GameOver");
+			GameOver.SetActive (false);
+		}
 		speed = 10f;
-		NetworkManager.singleton.gameObject.GetComponent<NetworkManagerHUD> ().showGUI = false;
 	}
 
 	void Update ()
@@ -53,7 +74,7 @@ public class PlataformGenerator: NetworkBehaviour
 						NewPlataform = findRecycle ("Plat" + n.ToString () + "(Clone)");
 						NewPlataform.tag = "Plataforma";
 						NewPlataform.transform.position = EndPosition;
-					} else
+					} else if (isServer)
 						NetworkServer.Spawn (NewPlataform = Instantiate (newPlataform (n), EndPosition, Quaternion.identity) as GameObject);
 				}
 
@@ -73,7 +94,7 @@ public class PlataformGenerator: NetworkBehaviour
 						//PrefabUtility.RevertPrefabInstance(NewPlataform);
 						NewBackground.tag = "Plataforma";
 						NewBackground.transform.position = BgEndPosition;
-					} else
+					} else if (isServer)
 						NetworkServer.Spawn (NewBackground = Instantiate (newBackground (n), BgEndPosition, Quaternion.identity) as GameObject);
 				}
 
@@ -163,9 +184,8 @@ public class PlataformGenerator: NetworkBehaviour
 		if (target != NewPlataform) {
 			GameObject pew;
 			NetworkServer.Spawn (pew = Instantiate (Resources.Load ("Prefabs/characters/Pew") as GameObject, Player.transform.position, Quaternion.identity) as GameObject);
-			PlataformGenerator.Player.GetComponent<PlayerController> ().laserSound ();
 			pew.gameObject.GetComponent<Pew> ().target = target;
-			Debug.Log (pew.gameObject.GetComponent<Pew> ().target.gameObject.GetComponent<Monster> ().HP);
+			PlataformGenerator.Player.GetComponent<PlayerController> ().laserSound ();
 		}
 	}
 }

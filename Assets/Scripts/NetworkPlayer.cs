@@ -31,4 +31,11 @@ public class NetworkPlayer : NetworkBehaviour
 	public void CmdTakeCaraCoroa(string s){
 		caraCoroa = s;
 	}
+
+	[Command]
+	public void CmdsetResult(string s){
+		if (isLocalPlayer) {
+			caraCoroa = s;
+		}
+	}
 }

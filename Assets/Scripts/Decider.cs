@@ -8,19 +8,24 @@ public class Decider : NetworkBehaviour
 {
 	public GameObject coin;
 	private bool decided = false;
-	public GameObject CCpanel;
+	public GameObject CxPanel;
 	public GameObject Cpanel;
+	public GameObject CCpanel;
 	private NetworkPlayer thisOne;
+	private NetworkPlayer higherOne;
 
 	// Update is called once per frame
-	void Start (){
+	void Start ()
+	{
 	}
 
 	void Update ()
 	{
 		if (GameObject.FindGameObjectsWithTag ("NetPlayer").Length != 2) {
+			CxPanel.SetActive (true);
 			Cpanel.SetActive (false);
 		} else {
+			CxPanel.SetActive (false);
 			Cpanel.SetActive (true);
 		}
 		if (!thisOne) {
@@ -34,7 +39,21 @@ public class Decider : NetworkBehaviour
 				coin.SetActive (true);
 			}
 			if (coin.activeSelf && coin.GetComponent<CoinSpin> ().result != "") {
-				if (coin.GetComponent<CoinSpin> ().result == thisOne.caraCoroa) {
+				if (thisOne == higherOne) {
+					if (coin.GetComponent<CoinSpin> ().result == thisOne.caraCoroa) {
+						foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {
+							nPlayer.GetComponent<NetworkPlayer> ().CmdsetResult ((thisOne.choice == "Meddler") ? "Walker" : "Meddler");
+						}
+						thisOne.CmdsetResult (thisOne.choice);
+					} else {
+						foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {
+							nPlayer.GetComponent<NetworkPlayer> ().CmdsetResult (thisOne.choice);
+						}
+						thisOne.CmdsetResult ((thisOne.choice == "Meddler") ? "Walker" : "Meddler");
+					}
+				}
+				/*if (coin.GetComponent<CoinSpin> ().result == thisOne.caraCoroa) {
+					thisOne.CmdsetResult(thisOne.choice)
 					PlayerPrefs.SetString ("Mode", thisOne.choice);
 				} else {
 					if (thisOne.choice == "Walker") {
@@ -44,7 +63,7 @@ public class Decider : NetworkBehaviour
 						thisOne.CmdTakeChoice("Walker");
 						PlayerPrefs.SetString ("Mode", "Walker");
 					}
-				}
+				}*/
 				if (!decided)
 					StartCoroutine (QWER ());
 			}
@@ -54,7 +73,7 @@ public class Decider : NetworkBehaviour
 	private IEnumerator QWER ()
 	{
 		decided = true;
-		yield return new WaitForSeconds (2);
+		yield return new WaitForSeconds (1);
 		// thisOne.play ();
 		NetworkManager.singleton.ServerChangeScene ("qwer");
 
@@ -62,13 +81,13 @@ public class Decider : NetworkBehaviour
 
 	public void CaraCoroa (string cc)
 	{
-		thisOne.CmdTakeCaraCoroa(cc);
+		thisOne.CmdTakeCaraCoroa (cc);
 		foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {
 			if (!nPlayer.GetComponent<NetworkPlayer> ().isLocalPlayer) {
 				if (cc == "Cara") {
 					nPlayer.GetComponent<NetworkPlayer> ().CmdTakeCaraCoroa ("Coroa");
 				} else {
-					nPlayer.GetComponent<NetworkPlayer> ().CmdTakeCaraCoroa("Cara");
+					nPlayer.GetComponent<NetworkPlayer> ().CmdTakeCaraCoroa ("Cara");
 				}
 			}
 		}
@@ -76,7 +95,7 @@ public class Decider : NetworkBehaviour
 
 	public void Choice (string c)
 	{
-		thisOne.CmdTakeChoice(c);
+		thisOne.CmdTakeChoice (c);
 		float min = Mathf.Infinity;
 		foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {
 			if (nPlayer.GetComponent<NetworkPlayer> ().playerControllerId < min) {
@@ -85,6 +104,7 @@ public class Decider : NetworkBehaviour
 		}
 		foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {
 			if (nPlayer.GetComponent<NetworkPlayer> ().isLocalPlayer && nPlayer.GetComponent<NetworkPlayer> ().playerControllerId == min) {
+				higherOne = nPlayer.GetComponent<NetworkPlayer> ();
 				CCpanel.SetActive (true);
 			}
 		}

@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Monster : MonoBehaviour
+public class Monster : NetworkBehaviour
 {
-
+	[SyncVar]
 	public int HP;
 
 	// Use this for initialization

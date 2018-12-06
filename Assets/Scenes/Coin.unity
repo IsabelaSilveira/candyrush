@@ -1549,7 +1549,7 @@ GameObject:
   - component: {fileID: 469951386}
   - component: {fileID: 469951389}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Network Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1562,7 +1562,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 469951385}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 227461547, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
   m_Name: 
@@ -1598,7 +1598,19 @@ MonoBehaviour:
   m_PlayerSpawnMethod: 0
   m_OfflineScene: 
   m_OnlineScene: 
-  m_SpawnPrefabs: []
+  m_SpawnPrefabs:
+  - {fileID: 3594916801429684638, guid: 036549d7ee2e966478bd0916c1c803e4, type: 3}
+  - {fileID: 3594916801429684638, guid: 257c7d3d6757ba24a9b2306d5df3b4e0, type: 3}
+  - {fileID: 3594916801429684638, guid: 182cddd84d852ce4e81d14cfc3812d0c, type: 3}
+  - {fileID: 363548790924301078, guid: a75f6bcb97a4b4a42bb00a4b1b157178, type: 3}
+  - {fileID: 2796925973809791610, guid: ce0327d50d234a6409d1abbcdc8c644d, type: 3}
+  - {fileID: 4891786856305138407, guid: ddfd3279a6e806045856a9060f1665d9, type: 3}
+  - {fileID: 2434953291757878201, guid: 5d95409cd71ce694496050ebc15da161, type: 3}
+  - {fileID: 3324629106828208201, guid: a5a92f547ad0bb447ab1c37ddef3f1a0, type: 3}
+  - {fileID: 1964102790456386, guid: 9d9f931038f87bf4980deab3a4254283, type: 3}
+  - {fileID: 1329040374105620, guid: 387aea9f037774a429fa0f8f3949af78, type: 3}
+  - {fileID: 1679850853564463050, guid: 4a2c2a68bcd2c8b499c12b964a5c0380, type: 3}
+  - {fileID: 2661236125954605785, guid: 74a8f822ab0f0d542bb238cd6cda6144, type: 3}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -3010,8 +3022,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coin: {fileID: 5566379366478680737}
-  CCpanel: {fileID: 1391323501}
+  CxPanel: {fileID: 359788056}
   Cpanel: {fileID: 1660824179}
+  CCpanel: {fileID: 1391323501}
 --- !u!1 &1866849003
 GameObject:
   m_ObjectHideFlags: 0
