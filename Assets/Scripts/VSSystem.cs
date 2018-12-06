@@ -25,6 +25,7 @@ public class VSSystem : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+		/*
 		if (PlataformGenerator.Player.transform.position.x < -25f || PlataformGenerator.Player.transform.position.y < -10f) {
 			try {
 				GameObject.Find ("Main Camera W1").GetComponent<AudioSource> ().mute = true;
@@ -33,7 +34,6 @@ public class VSSystem : MonoBehaviour
 			}
 			PlataformGenerator.GameOver.SetActive (true);
 		}
-		/*
 		if (randomJump && Random.value < 0.005f) {
 			PlataformGenerator.Player.gameObject.GetComponent<PlayerController> ().jump ();
 			if (PlataformGenerator.Player.transform.position.x < -35f || PlataformGenerator.Player.transform.position.y < -20f) {
