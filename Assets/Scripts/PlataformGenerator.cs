@@ -86,8 +86,7 @@ public class PlataformGenerator: NetworkBehaviour
 				}
 				if (BgEndPosition.x < 100f) {
 					bg++;
-					int n = (bg % 3) + 1;//Random.Range(1,4);
-					Debug.Log (n);
+					int n = /*(bg % 3) + 1;*/Random.Range(1,4);
 					if (findRecycle ("Bg" + n.ToString () + "(Clone)")) {
 						NewBackground = findRecycle ("Bg" + n.ToString () + "(Clone)");
 						//PrefabUtility.RevertPrefabInstance(NewPlataform);

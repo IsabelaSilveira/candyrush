@@ -3,23 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+using System.Net;
+using System.Net.Sockets;
+using System.Linq;
 
 [RequireComponent (typeof(NetworkManager))]
 public class NetworkInterface : MonoBehaviour
 {
 	public void getIp (Text target){
-		Debug.Log ("Host pressed");
+		NetworkManager.singleton.StopClient ();
+		NetworkManager.singleton.StopHost ();
+		NetworkManager.singleton.networkAddress = Dns.GetHostEntry (Dns.GetHostName ()).AddressList.FirstOrDefault (a => a.AddressFamily == AddressFamily.InterNetwork).ToString();
 		target.text += NetworkManager.singleton.networkAddress;
 		NetworkManager.singleton.StartHost ();
 	}
 
 	public void setIp (InputField target){
+		NetworkManager.singleton.StopClient ();
+		NetworkManager.singleton.StopHost ();
 		NetworkManager.singleton.networkAddress = target.text;
 		NetworkManager.singleton.StartClient ();
 	}
 
 	public void stop (){
-		NetworkManager.singleton.StopClient();
-		NetworkManager.singleton.StopHost();
+		NetworkManager.singleton.StopClient ();
+		NetworkManager.singleton.StopHost ();
+		NetworkManager.Shutdown ();
 	}
 }

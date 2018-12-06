@@ -777,8 +777,8 @@ Canvas:
   m_GameObject: {fileID: 307793139}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 334609851}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -800,6 +800,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
+  - {fileID: 584283367}
   - {fileID: 359788057}
   - {fileID: 1660824180}
   - {fileID: 1391323502}
@@ -1036,7 +1037,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 1158.5
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -1244,9 +1245,8 @@ RectTransform:
   - {fileID: 1300448058}
   - {fileID: 1339695751}
   - {fileID: 1633654698}
-  - {fileID: 584283367}
   m_Father: {fileID: 307793143}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1300,7 +1300,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 372111801}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1972,16 +1972,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 584283366}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 359788057}
-  m_RootOrder: 7
+  m_Father: {fileID: 307793143}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 257}
+  m_AnchoredPosition: {x: 0, y: 1.9992676}
   m_SizeDelta: {x: 500, y: 320}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &584283368
@@ -2542,6 +2542,7 @@ GameObject:
   - component: {fileID: 1339695754}
   - component: {fileID: 1339695753}
   - component: {fileID: 1339695752}
+  - component: {fileID: 1339695755}
   m_Layer: 0
   m_Name: Voltar
   m_TagString: Untagged
@@ -2620,9 +2621,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 102900000, guid: dcedd89a5f8f6f94c8f4c564c835cda1, type: 3}
-        m_MethodName: 
-        m_Mode: 6
+      - m_Target: {fileID: 1339695755}
+        m_MethodName: Jogar
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2670,6 +2671,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1339695750}
   m_CullTransparentMesh: 0
+--- !u!114 &1339695755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1339695750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 252f423ca7575404b939f4d731acaa4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scenePlay: MenuInicial
 --- !u!1 &1369439530
 GameObject:
   m_ObjectHideFlags: 0
@@ -2843,7 +2857,7 @@ RectTransform:
   - {fileID: 432637696}
   - {fileID: 340073377}
   m_Father: {fileID: 307793143}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -3073,7 +3087,7 @@ RectTransform:
   - {fileID: 476338547}
   - {fileID: 36867119}
   m_Father: {fileID: 307793143}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3563,7 +3577,7 @@ PrefabInstance:
     - target: {fileID: 4215940753417336404, guid: 05942adb831b0d74bbea916305831125,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4215940753417824884, guid: 05942adb831b0d74bbea916305831125,
         type: 3}
