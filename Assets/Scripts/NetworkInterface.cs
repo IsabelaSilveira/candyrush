@@ -18,10 +18,15 @@ public class NetworkInterface : MonoBehaviour
 		NetworkManager.singleton.StartHost ();
 	}
 
+	public void rememberIp (InputField target){
+		target.text = PlayerPrefs.GetString ("LastIp", Dns.GetHostEntry (Dns.GetHostName ()).AddressList.FirstOrDefault (a => a.AddressFamily == AddressFamily.InterNetwork).ToString ());
+	}
+
 	public void setIp (InputField target){
 		NetworkManager.singleton.StopClient ();
 		NetworkManager.singleton.StopHost ();
 		NetworkManager.singleton.networkAddress = target.text;
+		PlayerPrefs.GetString ("LastIp", NetworkManager.singleton.networkAddress);
 		NetworkManager.singleton.StartClient ();
 	}
 

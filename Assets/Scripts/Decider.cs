@@ -52,6 +52,7 @@ public class Decider : NetworkBehaviour
 						thisOne.CmdsetResult ((thisOne.choice == "Meddler") ? "Walker" : "Meddler");
 					}
 				}
+				PlayerPrefs.SetString ("Mode", thisOne.choice);
 				/*if (coin.GetComponent<CoinSpin> ().result == thisOne.caraCoroa) {
 					thisOne.CmdsetResult(thisOne.choice)
 					PlayerPrefs.SetString ("Mode", thisOne.choice);
