@@ -7,12 +7,16 @@ public class NetworkPlayer : NetworkBehaviour
 {
 	public string choice { get; private set; }
 	public string caraCoroa { get; private set; }
+	public string skin { get; private set; }
 
     // Start is called before the first frame update
     void Start()
 	{
 		choice = "";
 		caraCoroa = "";
+		if (isLocalPlayer) {
+			CmdChangeSkin(PlayerPrefs.GetString ("Skin", "Player1"));
+		}
     	DontDestroyOnLoad(this.gameObject);
     }
 
@@ -20,6 +24,11 @@ public class NetworkPlayer : NetworkBehaviour
     void Update()
     {
         
+	}
+
+	[Command]
+	private void CmdChangeSkin(string s){
+		skin = s;
 	}
 
 	[Command]
@@ -31,11 +40,11 @@ public class NetworkPlayer : NetworkBehaviour
 	public void CmdTakeCaraCoroa(string s){
 		caraCoroa = s;
 	}
-
+	/*
 	[Command]
 	public void CmdsetResult(string s){
 		if (isLocalPlayer) {
-			caraCoroa = s;
+			choice = s;
 		}
-	}
+	}*/
 }

@@ -22,6 +22,8 @@ public class PlataformGenerator: NetworkBehaviour
 	public static Vector3 BgEndPosition;
 	Vector3 EndPosAdjust = new Vector3 (2.2f, 0, 0);
 
+	public string skinChoice;
+
 	private int bg = 0;
 
 	void Awaken ()
@@ -47,9 +49,14 @@ public class PlataformGenerator: NetworkBehaviour
 	{
 		StartPlataformGenerator = GameObject.Find ("StartPlataformGenerator").transform;
 		if (isServer) {
+			foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {
+				if (nPlayer.GetComponent<NetworkPlayer> ().choice == "Walker") {
+					skinChoice = nPlayer.GetComponent<NetworkPlayer> ().skin;
+				}
+			}
 			NetworkServer.Spawn (NewPlataform = Instantiate (Resources.Load ("Prefabs/plataforms/Plat1") as GameObject, StartPlataformGenerator.position, Quaternion.identity) as GameObject);
 			NetworkServer.Spawn (NewBackground = Instantiate (Resources.Load ("Prefabs/plataforms/Bg1") as GameObject, StartPlataformGenerator.position, Quaternion.identity) as GameObject);
-			NetworkServer.Spawn (Player = Instantiate (Resources.Load ("Prefabs/characters/" + PlayerPrefs.GetString ("Skin", "Player1")) as GameObject, StartPlataformGenerator.position + new Vector3 (0, 5f, 0f), Quaternion.identity) as GameObject);
+			NetworkServer.Spawn (Player = Instantiate (Resources.Load ("Prefabs/characters/" + skinChoice) as GameObject, StartPlataformGenerator.position + new Vector3 (0, 5f, 0f), Quaternion.identity) as GameObject);
 		}
 		GameOver = GameObject.Find ("GameOver");
 		GameOver.SetActive (false);

@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
-using System.Net;
-using System.Net.Sockets;
-using System.Linq;
 
 [RequireComponent (typeof(NetworkManager))]
 public class NetworkCandyUI : MonoBehaviour
@@ -13,7 +10,7 @@ public class NetworkCandyUI : MonoBehaviour
 	public void getIp (Text target){
 		NetworkManager.singleton.StopClient ();
 		NetworkManager.singleton.StopHost ();
-		NetworkManager.singleton.networkAddress = IPManager.GetIP (ADDRESSFAM.IPv4);//Dns.GetHostEntry (Dns.GetHostName ()).AddressList.FirstOrDefault (a => a.AddressFamily == AddressFamily.InterNetwork).ToString();
+		NetworkManager.singleton.networkAddress = IPManager.GetIP (ADDRESSFAM.IPv4);
 		target.text += NetworkManager.singleton.networkAddress;
 		NetworkManager.singleton.StartHost ();
 	}

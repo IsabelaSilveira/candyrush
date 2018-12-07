@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 [RequireComponent (typeof(Rigidbody))]
 [RequireComponent (typeof(CapsuleCollider))]
 [RequireComponent (typeof(SwipeDetector))]
 [RequireComponent (typeof(AudioSource))]
 [RequireComponent (typeof(Animator))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
 
 	public static bool active = false;
@@ -78,12 +79,12 @@ public class PlayerController : MonoBehaviour
 
 			rigidBody.AddForce (Vector3.down * JumpSpeed);
 			if ((Input.GetKeyDown (KeyCode.UpArrow)) || (SwipeDetector.swipeValue > 0)) {
-				jump ();
+				CmdJump ();
 			}
 
 			//pressionar o botao ou deslizar o dedo para baixo
 			if (Input.GetKeyDown (KeyCode.DownArrow) || (SwipeDetector.swipeValue < 0)) {
-				sweep ();
+				CmdSweep ();
 			}
 			if (sweepKick == true) {
 				actionTime += Time.deltaTime;
@@ -98,7 +99,8 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	public void jump ()
+	[Command]
+	public void CmdJump ()
 	{
 		if (Time.time < inactiveTime) {
 			Debug.Log ("Can't jump yet");
@@ -116,7 +118,8 @@ public class PlayerController : MonoBehaviour
 		animator.SetTrigger ("jumpTrigger");
 	}
 
-	public void sweep ()
+	[Command]
+	public void CmdSweep ()
 	{
 		sweepKick = true;
 		capsuleCollider.height = 2.25f;

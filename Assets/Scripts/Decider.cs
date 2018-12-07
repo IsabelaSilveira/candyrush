@@ -42,14 +42,14 @@ public class Decider : NetworkBehaviour
 				if (thisOne == higherOne) {
 					if (coin.GetComponent<CoinSpin> ().result == thisOne.caraCoroa) {
 						foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {
-							nPlayer.GetComponent<NetworkPlayer> ().CmdsetResult ((thisOne.choice == "Meddler") ? "Walker" : "Meddler");
+							nPlayer.GetComponent<NetworkPlayer> ().CmdTakeChoice ((thisOne.choice == "Meddler") ? "Walker" : "Meddler");
 						}
-						thisOne.CmdsetResult (thisOne.choice);
+						thisOne.CmdTakeChoice (thisOne.choice);
 					} else {
 						foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {
-							nPlayer.GetComponent<NetworkPlayer> ().CmdsetResult (thisOne.choice);
+							nPlayer.GetComponent<NetworkPlayer> ().CmdTakeChoice (thisOne.choice);
 						}
-						thisOne.CmdsetResult ((thisOne.choice == "Meddler") ? "Walker" : "Meddler");
+						thisOne.CmdTakeChoice ((thisOne.choice == "Meddler") ? "Walker" : "Meddler");
 					}
 				}
 				PlayerPrefs.SetString ("Mode", thisOne.choice);
