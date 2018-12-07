@@ -76,7 +76,9 @@ public class Decider : NetworkBehaviour
 		decided = true;
 		GameObject loading = Instantiate (Resources.Load ("loading") as GameObject);
 		loading.transform.SetParent (GameObject.FindObjectOfType<Canvas>().transform);
-		loading.transform.position = Vector2.zero;
+		loading.transform.localRotation = Quaternion.identity;
+		loading.transform.localPosition = Vector2.zero;
+		loading.transform.localScale = Vector2.one;
 		yield return new WaitForSeconds (1);
 		NetworkManager.singleton.ServerChangeScene ("qwer");
 

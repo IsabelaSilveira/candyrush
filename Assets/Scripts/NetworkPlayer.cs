@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 
 public class NetworkPlayer : NetworkBehaviour
@@ -23,7 +24,17 @@ public class NetworkPlayer : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+		if (SceneManager.GetActiveScene ().name == "qwer") {
+			if (isLocalPlayer && choice == "Meddler") {
+				this.gameObject.GetComponent<Camera> ().CopyFrom (GameObject.Find ("Main Camera M1").GetComponent<Camera> ());
+				this.gameObject.GetComponent<Camera> ().enabled = true;
+				this.transform.SetParent (GameObject.Find ("Main Camera M1").transform);
+			} else if (isLocalPlayer && choice == "Walker") {
+				this.gameObject.GetComponent<Camera> ().CopyFrom (GameObject.Find ("Main Camera W1").GetComponent<Camera> ());
+				this.gameObject.GetComponent<Camera> ().enabled = true;
+				this.transform.SetParent (GameObject.Find ("Main Camera W1").transform);
+			}
+		}
 	}
 
 	[Command]

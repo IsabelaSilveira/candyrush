@@ -52,11 +52,11 @@ public class PlataformGenerator: NetworkBehaviour
 			foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {
 				if (nPlayer.GetComponent<NetworkPlayer> ().choice == "Walker") {
 					skinChoice = nPlayer.GetComponent<NetworkPlayer> ().skin;
+					NetworkServer.SpawnWithClientAuthority (Player = Instantiate (Resources.Load ("Prefabs/characters/" + skinChoice) as GameObject, StartPlataformGenerator.position + new Vector3 (0, 5f, 0f), Quaternion.identity) as GameObject, nPlayer);
 				}
 			}
 			NetworkServer.Spawn (NewPlataform = Instantiate (Resources.Load ("Prefabs/plataforms/Plat1") as GameObject, StartPlataformGenerator.position, Quaternion.identity) as GameObject);
 			NetworkServer.Spawn (NewBackground = Instantiate (Resources.Load ("Prefabs/plataforms/Bg1") as GameObject, StartPlataformGenerator.position, Quaternion.identity) as GameObject);
-			NetworkServer.Spawn (Player = Instantiate (Resources.Load ("Prefabs/characters/" + skinChoice) as GameObject, StartPlataformGenerator.position + new Vector3 (0, 5f, 0f), Quaternion.identity) as GameObject);
 		}
 		GameOver = GameObject.Find ("GameOver");
 		GameOver.SetActive (false);
@@ -65,7 +65,7 @@ public class PlataformGenerator: NetworkBehaviour
 
 	void Update ()
 	{
-		if (!PlataformGenerator.GameOver.activeSelf) {
+		if (!PlataformGenerator.GameOver.activeSelf && isServer) {
 			try {
 				ChildCount = NewPlataform.transform.childCount;
 				for (int i = 0; i < ChildCount; i++) {

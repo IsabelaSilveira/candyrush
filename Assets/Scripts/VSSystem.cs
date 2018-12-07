@@ -18,19 +18,12 @@ public class VSSystem : MonoBehaviour
 		foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {
 			if (nPlayer.GetComponent<NetworkPlayer> ().isLocalPlayer) {
 				if (nPlayer.GetComponent<NetworkPlayer> ().choice == "Walker") {
-					GameObject.Find ("Main Camera W1").transform.SetParent (nPlayer.gameObject.transform);
 					WalkerMode ();
 				} else {
-					GameObject.Find ("Main Camera M1").transform.SetParent (nPlayer.gameObject.transform);
 					MeddlerWork ();
 				}
 			}
 		}
-		/*if (PlayerPrefs.GetString ("Mode", "Walker") == "Walker") {
-			WalkerMode ();
-		} else {
-			MeddlerWork ();
-		}*/
 	}
 	
 	// Update is called once per frame
