@@ -15,6 +15,7 @@ public class PowerUp : MonoBehaviour
 
 	void OnTriggerEnter (Collider other){
 		if (other.gameObject.name.StartsWith ("Player")) {
+			Score.powerUp++;
 			switch (powerUp) {
 			case "Jump":
 				other.gameObject.GetComponent<PlayerController> ().powerUpJump ();
@@ -28,7 +29,6 @@ public class PowerUp : MonoBehaviour
 			default:
 				break;
 			}
-			Score.powerUp++;
 			var ChildCount = this.transform.childCount;
 			for (int i = 0; i < ChildCount; i++) {
 				if (this.transform.GetChild (i).name == "Brilho") {

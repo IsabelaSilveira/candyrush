@@ -1,14 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 
 [RequireComponent (typeof(Rigidbody))]
 [RequireComponent (typeof(CapsuleCollider))]
 [RequireComponent (typeof(SwipeDetector))]
 [RequireComponent (typeof(AudioSource))]
 [RequireComponent (typeof(Animator))]
-public class PlayerController : NetworkBehaviour
+public class PlayerController : MonoBehaviour
 {
 
 	public static bool active = false;
@@ -68,23 +67,23 @@ public class PlayerController : NetworkBehaviour
 		this.GetComponent<Rigidbody> ().velocity = new Vector3 (0f, this.GetComponent<Rigidbody> ().velocity.y, 0f);
 
 		if (active) {
-			if (HP <= 0 || this.transform.position.x < -25f || this.transform.position.y < -10f) {
+			if (HP <= 0 || this.transform.position.x < -20f || this.transform.position.y < -5f) {
 				try {
 					GameObject.Find ("Main Camera W1").GetComponent<AudioSource> ().mute = true;
 					GameObject.Find ("Main Camera M1").GetComponent<AudioSource> ().mute = true;
 				} catch (System.NullReferenceException) {
 				}
-				PlataformGenerator.GameOver.SetActive (true);
+				God.GameOver ("Meddler");
 			}
 
 			rigidBody.AddForce (Vector3.down * JumpSpeed);
 			if ((Input.GetKeyDown (KeyCode.UpArrow)) || (SwipeDetector.swipeValue > 0)) {
-				CmdJump ();
+				jump ();
 			}
 
 			//pressionar o botao ou deslizar o dedo para baixo
 			if (Input.GetKeyDown (KeyCode.DownArrow) || (SwipeDetector.swipeValue < 0)) {
-				CmdSweep ();
+				sweep ();
 			}
 			if (sweepKick == true) {
 				actionTime += Time.deltaTime;
@@ -99,8 +98,7 @@ public class PlayerController : NetworkBehaviour
 		}
 	}
 
-	[Command]
-	public void CmdJump ()
+	public void jump ()
 	{
 		if (Time.time < inactiveTime) {
 			Debug.Log ("Can't jump yet");
@@ -118,8 +116,7 @@ public class PlayerController : NetworkBehaviour
 		animator.SetTrigger ("jumpTrigger");
 	}
 
-	[Command]
-	public void CmdSweep ()
+	public void sweep ()
 	{
 		sweepKick = true;
 		capsuleCollider.height = 2.25f;
@@ -189,7 +186,7 @@ public class PlayerController : NetworkBehaviour
 	void OnTriggerEnter (Collider other)
 	{
 		if (shield) {
-			if (other.gameObject.GetComponent<Monster> ()) {		
+			if (other.gameObject.tag == "Monster") {
 				other.gameObject.GetComponent<Monster> ().HP = 0;
 			}
 		} else {

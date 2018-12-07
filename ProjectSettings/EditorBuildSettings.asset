@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Coin.unity
     guid: d0cd7e2929ef75944934bffcdf41909a
+  - enabled: 1
+    path: Assets/Scenes/GameOver.unity
+    guid: ed1fdb1eeec967343ade2f1d8ac6f067
   m_configObjects: {}

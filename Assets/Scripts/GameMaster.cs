@@ -2,30 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Networking;
 
-public class GameMaster : NetworkBehaviour
+public class GameMaster : MonoBehaviour
 {
 	public static bool active = false;
 	public Button[] buttons;
-	[SyncVar]
 	public int obstaculos = 44;
-	public static GameMaster singleton;
-	public Text countText;
-	private int monster = -1;
-	private string powerUp = "";
-	private bool dropPlataforma = false;
-	private bool barracaDoce = false;
+	public static GameMaster instance;
+    public Text countText;
 
 	// Start is called before the first frame update
 	void Start ()
 	{
-		singleton = this;
-		foreach (GameObject nPlayer in GameObject.FindGameObjectsWithTag("NetPlayer")) {
-			if (nPlayer.GetComponent<NetworkPlayer> ().choice == "Meddler") {
-				this.transform.SetParent (nPlayer.transform);
-			}
-		}
+		instance = this;
 		foreach (Button button in buttons) {
 			attribRandom (button);
 		}
@@ -35,52 +24,21 @@ public class GameMaster : NetworkBehaviour
 	void Update ()
 	{
 		if (obstaculos <= 0) {
-			PlataformGenerator.GameOver.SetActive (true);
-			PlataformGenerator.GameOver.transform.rotation = Quaternion.Euler (new Vector3 (0f, 90f, 0f));
-			PlataformGenerator.GameOver.transform.position = new Vector3 (PlataformGenerator.GameOver.transform.position.x, PlataformGenerator.GameOver.transform.position.y, -7.2f);
-		}
-		if (barracaDoce) {
-			RpcBarracaDoce ();
-			barracaDoce = false;
-		}
-		if (dropPlataforma) {
-			RpcDropPlataform ();
-			dropPlataforma = false;
-		}
-		if (monster != -1) {
-			RpcSpawnMonster (monster);
-			monster = -1;
-		}
-		if (powerUp != "") {
-			RpcSpawnPowerUp (powerUp);
-			powerUp = "";
+			God.GameOver ("Walker");
 		}
 	}
 
-	[ClientRpc]
-	public void RpcSpawnMonster (int n)
+	public static void spawnMonster (int n)
 	{
-		foreach (var plataforma in GameObject.FindGameObjectsWithTag("Plataforma")) {
-			if ((plataforma.transform.position.x > 60 && plataforma.transform.position.x < 60 + PlataformGenerator.speed / 2) && plataforma.name.StartsWith ("Plat")) { 
-				NetworkServer.Spawn (Instantiate (Resources.Load ("Prefabs/characters/Monster" + n) as GameObject, PlataformGenerator.EndPosition + new Vector3 (-3f, 5f, 0f), Quaternion.identity) as GameObject);
-				break;
-			}
-		}
+		var temp = Instantiate (Resources.Load ("Prefabs/characters/Monster" + n) as GameObject, PlataformGenerator.EndPosition + new Vector3 (-3f, 5f, 0f), Quaternion.identity) as GameObject;
 	}
 
-	[ClientRpc]
-	public void RpcSpawnPowerUp (string powerUp)
+	public static void spawnPowerUp (string powerUp)
 	{
-		foreach (var plataforma in GameObject.FindGameObjectsWithTag("Plataforma")) {
-			if ((plataforma.transform.position.x > 60 && plataforma.transform.position.x < 60 + PlataformGenerator.speed / 2) && plataforma.name.StartsWith ("Plat")) {
-				NetworkServer.Spawn (Instantiate (Resources.Load ("Prefabs/plataforms/Power Up " + powerUp) as GameObject, PlataformGenerator.EndPosition + new Vector3 (-3f, 5f, 0f), Quaternion.identity) as GameObject);
-				break;
-			}
-		}
+		var temp = Instantiate (Resources.Load ("Prefabs/plataforms/Power Up " + powerUp) as GameObject, PlataformGenerator.EndPosition + new Vector3 (-3f, 5f, 0f), Quaternion.identity) as GameObject;
 	}
 
-	[ClientRpc]
-	public void RpcDropPlataform ()
+	public static void dropPlataform ()
 	{
 		foreach (var plataforma in GameObject.FindGameObjectsWithTag("Plataforma")) {
 			if ((plataforma.transform.position.x > 30 && plataforma.transform.position.x < 30 + PlataformGenerator.speed / 2) && plataforma.name.StartsWith ("Plat")) {
@@ -102,52 +60,20 @@ public class GameMaster : NetworkBehaviour
 		}
 	}
 
-	[ClientRpc]
-	public void RpcBarracaDoce ()
+	public static void barracaDoce ()
 	{
 		foreach (var plataforma in GameObject.FindGameObjectsWithTag("Plataforma")) {
 			if ((plataforma.transform.position.x > 60 && plataforma.transform.position.x < 60 + PlataformGenerator.speed / 2) && plataforma.name.StartsWith ("Plat")) {
-				NetworkServer.Spawn (Instantiate (Resources.Load ("Prefabs/plataforms/Barraca doces"), plataforma.transform.position + new Vector3 (0f, 4.8f, 1f), Quaternion.identity) as GameObject);
+				var barraca = Instantiate (Resources.Load ("Prefabs/plataforms/Barraca doces"), plataforma.transform.position + new Vector3 (0f, 4.8f, 1f), Quaternion.identity);
 				break;
 			}
-		} 
-	}
-
-	[Command]
-	public void CmdSpawnMonster (int n)
-	{
-		monster = n;
-	}
-
-	[Command]
-	public void CmdSpawnPowerUp (string powerUp)
-	{
-		powerUp = powerUp;
-	}
-
-	[Command]
-	public void CmdDropPlataform ()
-	{
-		dropPlataforma = true;
-	}
-
-	[Command]
-	public void CmdBarracaDoce ()
-	{
-		barracaDoce = true;
-	}
-
-	[Command]
-	private void CmdUpdateObstacle ()
-	{
-		obstaculos--;
+		}
 	}
 
 	private void attribRandom (Button b)
 	{
-		//NetworkServer.Spawn (b.gameObject);
-		CmdUpdateObstacle ();
-		countText.text = "" + obstaculos;
+		obstaculos--;
+        countText.text = 40 - obstaculos + " ";
 		if (obstaculos < 4) {
 			Destroy (b.gameObject);
 			return;
@@ -155,7 +81,7 @@ public class GameMaster : NetworkBehaviour
 		Image img = b.gameObject.GetComponent<Image> ();
 		b.onClick.RemoveAllListeners ();
 		b.onClick.AddListener (() => attribRandom (b));
-		Texture2D[] textures = { null, null, null, null, null, null };
+		Texture2D[] textures = {null,null,null,null,null,null};
 		textures [0] = Resources.Load ("Icons_barraca") as Texture2D;
 		textures [1] = Resources.Load ("Icons_fantasma") as Texture2D;
 		textures [2] = Resources.Load ("Icons_mola") as Texture2D;
@@ -165,32 +91,32 @@ public class GameMaster : NetworkBehaviour
 		Sprite spr;
 		switch (Random.Range (0, 6)) {
 		case 0:
-			b.onClick.AddListener (() => CmdBarracaDoce ());
+			b.onClick.AddListener (() => barracaDoce ());
 			spr = Sprite.Create (textures [0], new Rect (0f, 0f, textures [0].width, textures [0].height), new Vector2 (0.5f, 0.5f));
 			img.sprite = spr;
 			break;
 		case 1:
-			b.onClick.AddListener (() => CmdSpawnMonster (0));
+			b.onClick.AddListener (() => spawnMonster (0));
 			spr = Sprite.Create (textures [1], new Rect (0f, 0f, textures [1].width, textures [1].height), new Vector2 (0.5f, 0.5f));
 			img.sprite = spr;
 			break;
 		case 2:
-			b.onClick.AddListener (() => CmdSpawnPowerUp ("Jump"));
+			b.onClick.AddListener (() => spawnPowerUp ("Jump"));
 			spr = Sprite.Create (textures [2], new Rect (0f, 0f, textures [2].width, textures [2].height), new Vector2 (0.5f, 0.5f));
 			img.sprite = spr;
 			break;
 		case 3:
-			b.onClick.AddListener (() => CmdSpawnPowerUp ("Shield"));
+			b.onClick.AddListener (() => spawnPowerUp ("Shield"));
 			spr = Sprite.Create (textures [3], new Rect (0f, 0f, textures [3].width, textures [3].height), new Vector2 (0.5f, 0.5f));
 			img.sprite = spr;
 			break;
 		case 4:
-			b.onClick.AddListener (() => CmdSpawnPowerUp ("Speed"));
+			b.onClick.AddListener (() => spawnPowerUp ("Speed"));
 			spr = Sprite.Create (textures [4], new Rect (0f, 0f, textures [4].width, textures [4].height), new Vector2 (0.5f, 0.5f));
 			img.sprite = spr;
 			break;
 		case 5:
-			b.onClick.AddListener (() => CmdDropPlataform ());
+			b.onClick.AddListener (() => dropPlataform ());
 			spr = Sprite.Create (textures [5], new Rect (0f, 0f, textures [5].width, textures [5].height), new Vector2 (0.5f, 0.5f));
 			img.sprite = spr;
 			break;
