@@ -9,7 +9,6 @@ public class PlataformGenerator: MonoBehaviour
 
 	public Transform StartPlataformGenerator;
 	public static float speed = 1f;
-	public static GameObject GameOver;
 	GameObject NewPlataform;
 	GameObject NewBackground;
 	public static GameObject Player;
@@ -28,89 +27,72 @@ public class PlataformGenerator: MonoBehaviour
 		instance = this;
 		NewPlataform = Instantiate (Resources.Load ("Prefabs/plataforms/Plat1") as GameObject, StartPlataformGenerator.position, Quaternion.identity) as GameObject;
 		NewBackground = Instantiate (Resources.Load ("Prefabs/plataforms/Bg1") as GameObject, StartPlataformGenerator.position, Quaternion.identity) as GameObject;
-		Player = Instantiate (Resources.Load ("Prefabs/characters/"+ PlayerPrefs.GetString("Skin" ,"Player1")) as GameObject, StartPlataformGenerator.position + new Vector3 (0, 5f, 0f), Quaternion.identity) as GameObject;
-		GameOver = GameObject.Find ("GameOver");
-		GameOver.SetActive (false);
+		Player = Instantiate (Resources.Load ("Prefabs/characters/" + PlayerPrefs.GetString ("Skin", "Player1")) as GameObject, StartPlataformGenerator.position + new Vector3 (0, 5f, 0f), Quaternion.identity) as GameObject;
 		speed = 10f;
 	}
 
 	void FixedUpdate ()
 	{
-		if (!PlataformGenerator.GameOver.activeSelf) {
-			try {
-				ChildCount = NewPlataform.transform.childCount;
-				for (int i = 0; i < ChildCount; i++) {
-					if (NewPlataform.transform.GetChild (i).name == "End") {
-						EndPosition = NewPlataform.transform.GetChild (i).position + EndPosAdjust;
-						break;
-					}
+		try {
+			ChildCount = NewPlataform.transform.childCount;
+			for (int i = 0; i < ChildCount; i++) {
+				if (NewPlataform.transform.GetChild (i).name == "End") {
+					EndPosition = NewPlataform.transform.GetChild (i).position + EndPosAdjust;
+					break;
 				}
-				if (EndPosition.x < 100f) {
-					int n = 1;
-					if (findRecycle ("Plat" + n.ToString () + "(Clone)")) {
-						NewPlataform = findRecycle ("Plat" + n.ToString () + "(Clone)");
-						NewPlataform.tag = "Plataforma";
-						NewPlataform.transform.position = EndPosition;
-					} else
-						NewPlataform = Instantiate (newPlataform (n), EndPosition, Quaternion.identity) as GameObject;
-				}
-
-				ChildCount = NewBackground.transform.childCount;
-				for (int i = 0; i < ChildCount; i++) {
-					if (NewBackground.transform.GetChild (i).name == "End") {
-						BgEndPosition = NewBackground.transform.GetChild (i).position;
-						break;
-					}
-				}
-				if (BgEndPosition.x < 100f) {
-					bg++;
-					int n = (bg % 3) + 1;//Random.Range(1,4);
-					Debug.Log (n);
-					if (findRecycle ("Bg" + n.ToString () + "(Clone)")) {
-						NewBackground = findRecycle ("Bg" + n.ToString () + "(Clone)");
-						//PrefabUtility.RevertPrefabInstance(NewPlataform);
-						NewBackground.tag = "Plataforma";
-						NewBackground.transform.position = BgEndPosition;
-					} else
-						NewBackground = Instantiate (newBackground (n), BgEndPosition, Quaternion.identity) as GameObject;
-				}
-
-				foreach (var plataforma in GameObject.FindGameObjectsWithTag("Plataforma")) {
-					if (!(plataforma.transform.position.x == 666 && plataforma.transform.position.y == 666 && plataforma.transform.position.z == 666))
-						plataforma.GetComponent<Rigidbody> ().velocity = new Vector3 (-speed, plataforma.GetComponent<Rigidbody> ().velocity.y, 0f);
-
-					if (plataforma.transform.position.x < -50f || plataforma.transform.position.y < -20f) {
-						if (plataforma.name.StartsWith ("Plat") && plataforma.GetComponent<BoxCollider> ().enabled == false) {
-							Destroy (plataforma);
-						} else {
-							plataforma.GetComponent<Rigidbody> ().useGravity = false;
-							recycle (plataforma);
-						}
-					}
-				}
-
-				foreach (var monster in GameObject.FindGameObjectsWithTag("Monster")) {
-					monster.GetComponent<Rigidbody> ().velocity = new Vector3 (-speed * 1.2f, monster.GetComponent<Rigidbody> ().velocity.y, 0f);
-					if (monster.transform.position.x < -30f || monster.transform.position.y < -20f) {
-						Score.despawned += 1;
-						Destroy (monster);
-					}
-				}
-
-			} catch (MissingReferenceException) {
 			}
-		} else
+			if (EndPosition.x < 100f) {
+				int n = 1;
+				if (findRecycle ("Plat" + n.ToString () + "(Clone)")) {
+					NewPlataform = findRecycle ("Plat" + n.ToString () + "(Clone)");
+					NewPlataform.tag = "Plataforma";
+					NewPlataform.transform.position = EndPosition;
+				} else
+					NewPlataform = Instantiate (newPlataform (n), EndPosition, Quaternion.identity) as GameObject;
+			}
+
+			ChildCount = NewBackground.transform.childCount;
+			for (int i = 0; i < ChildCount; i++) {
+				if (NewBackground.transform.GetChild (i).name == "End") {
+					BgEndPosition = NewBackground.transform.GetChild (i).position;
+					break;
+				}
+			}
+			if (BgEndPosition.x < 100f) {
+				bg++;
+				int n = (bg % 3) + 1;//Random.Range(1,4);
+				if (findRecycle ("Bg" + n.ToString () + "(Clone)")) {
+					NewBackground = findRecycle ("Bg" + n.ToString () + "(Clone)");
+					NewBackground.tag = "Plataforma";
+					NewBackground.transform.position = BgEndPosition;
+				} else
+					NewBackground = Instantiate (newBackground (n), BgEndPosition, Quaternion.identity) as GameObject;
+			}
+
 			foreach (var plataforma in GameObject.FindGameObjectsWithTag("Plataforma")) {
-				if (plataforma.gameObject.GetComponent<Rigidbody> () != null) {
-					plataforma.gameObject.GetComponent<Rigidbody> ().useGravity = true;
-					plataforma.gameObject.GetComponent<Rigidbody> ().constraints = RigidbodyConstraints.FreezeRotation;
-					plataforma.GetComponent<Rigidbody> ().velocity = new Vector3 (0f, plataforma.GetComponent<Rigidbody> ().velocity.y, 0f);
-				} else if (plataforma.gameObject.GetComponent<Rigidbody> () == null) {
-					plataforma.gameObject.AddComponent<Rigidbody> ();
-					plataforma.gameObject.GetComponent<Rigidbody> ().freezeRotation = true;
-					plataforma.GetComponent<Rigidbody> ().velocity = new Vector3 (0f, plataforma.GetComponent<Rigidbody> ().velocity.y, 0f);
+				if (!(plataforma.transform.position.x == 666 && plataforma.transform.position.y == 666 && plataforma.transform.position.z == 666))
+					plataforma.GetComponent<Rigidbody> ().velocity = new Vector3 (-speed, plataforma.GetComponent<Rigidbody> ().velocity.y, 0f);
+
+				if (plataforma.transform.position.x < -50f || plataforma.transform.position.y < -20f) {
+					if (plataforma.name.StartsWith ("Plat") && plataforma.GetComponent<BoxCollider> ().enabled == false) {
+						Destroy (plataforma);
+					} else {
+						plataforma.GetComponent<Rigidbody> ().useGravity = false;
+						recycle (plataforma);
+					}
 				}
 			}
+
+			foreach (var monster in GameObject.FindGameObjectsWithTag("Monster")) {
+				monster.GetComponent<Rigidbody> ().velocity = new Vector3 (-speed * 1.2f, monster.GetComponent<Rigidbody> ().velocity.y, 0f);
+				if (monster.transform.position.x < -30f || monster.transform.position.y < -20f) {
+					Score.despawned += 1;
+					Destroy (monster);
+				}
+			}
+
+		} catch (MissingReferenceException) {
+		}
 	}
 
 	void Restart ()

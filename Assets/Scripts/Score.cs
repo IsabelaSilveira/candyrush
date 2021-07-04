@@ -7,6 +7,7 @@ public class Score : MonoBehaviour
 
 	public static int died;
 	public static int despawned;
+	public static int powerUp;
 
     // Start is called before the first frame update
     void Start()

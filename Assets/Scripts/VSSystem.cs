@@ -25,26 +25,32 @@ public class VSSystem : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		if (PlataformGenerator.Player.transform.position.x < -25f || PlataformGenerator.Player.transform.position.y < -10f) {
+		if (PlataformGenerator.Player.transform.position.x < -15f || PlataformGenerator.Player.transform.position.y < -5f) {
 			try {
 				GameObject.Find ("Main Camera W1").GetComponent<AudioSource> ().mute = true;
 				GameObject.Find ("Main Camera M1").GetComponent<AudioSource> ().mute = true;
 			} catch (System.NullReferenceException) {
 			}
-			PlataformGenerator.GameOver.SetActive (true);
+			God.GameOver ("Meddler");
 		}
-		if (randomJump && Random.value < 0.005f) {
-			PlataformGenerator.Player.gameObject.GetComponent<PlayerController> ().jump ();
-			if (PlataformGenerator.Player.transform.position.x < -35f || PlataformGenerator.Player.transform.position.y < -20f) {
+		if (randomJump && Random.value < 0.01f) {
+			if (Random.value < 0.3f)
+				PlataformGenerator.instance.buttonPew ();
+			if (Random.value < 0.5f) {
+				PlataformGenerator.Player.gameObject.GetComponent<PlayerController> ().jump ();
+			} else {
+				PlataformGenerator.Player.gameObject.GetComponent<PlayerController> ().sweep ();
+			}
+			if (PlataformGenerator.Player.transform.position.x < -20f || PlataformGenerator.Player.transform.position.y < -5f) {
 				try {
 					GameObject.Find ("Main Camera W1").GetComponent<AudioSource> ().mute = true;
 					GameObject.Find ("Main Camera M1").GetComponent<AudioSource> ().mute = true;
 				} catch (System.NullReferenceException) {
 				}
-				PlataformGenerator.GameOver.SetActive (true);
+				God.GameOver ("Meddler");
 			}
 		}
-		if (randomMonster && Random.value < 0.03f) {
+		if (randomMonster && Random.value < 0.02f) {
 			GameMaster.instance.obstaculos--;
 			if (Random.value < 0.1) {
 				GameMaster.dropPlataform ();
@@ -67,8 +73,8 @@ public class VSSystem : MonoBehaviour
 			}
 		}
 
-		meddlerScore.text = (150 * Score.despawned + (PlataformGenerator.GameOver.activeSelf ? 1000 : 0)).ToString ();
-		walkerScore.text = (10 * Score.despawned + 200 * Score.died).ToString ();
+		meddlerScore.text = (150 * Score.despawned + 200 * Score.powerUp).ToString ();
+		walkerScore.text = (10 * Score.despawned + 200 * Score.died + 50 * Score.powerUp).ToString (); 
 	}
 
 	void WalkerMode ()
@@ -87,3 +93,26 @@ public class VSSystem : MonoBehaviour
 		GameMaster.active = true;
 	}
 }
+
+/*
+			bool jumps = false;
+			foreach (var plataforma in GameObject.FindGameObjectsWithTag("Plataforma")) {
+				if (((plataforma.transform.position.x > -10 && plataforma.transform.position.x < 0) && plataforma.name.StartsWith ("Plat"))) {
+					jumps = true;
+				}
+			}
+			if (jumps && Random.value < 0.9f) {
+				PlataformGenerator.Player.gameObject.GetComponent<PlayerController> ().jump ();
+				jumps = false;
+			}
+			bool sweeps = false;
+			foreach (var plataforma in GameObject.FindGameObjectsWithTag("Plataforma")) {
+				if (((plataforma.transform.position.x > -10 && plataforma.transform.position.x < 0) && plataforma.name.StartsWith ("Barr"))) {
+					sweeps = true;
+				}
+			}
+			if (sweeps && Random.value < 0.9f) {
+				PlataformGenerator.Player.gameObject.GetComponent<PlayerController> ().sweep ();
+				sweeps = false;
+			}
+*/

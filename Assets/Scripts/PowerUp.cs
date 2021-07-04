@@ -15,6 +15,7 @@ public class PowerUp : MonoBehaviour
 
 	void OnTriggerEnter (Collider other){
 		if (other.gameObject.name.StartsWith ("Player")) {
+			Score.powerUp++;
 			switch (powerUp) {
 			case "Jump":
 				other.gameObject.GetComponent<PlayerController> ().powerUpJump ();

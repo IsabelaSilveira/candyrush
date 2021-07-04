@@ -67,13 +67,13 @@ public class PlayerController : MonoBehaviour
 		this.GetComponent<Rigidbody> ().velocity = new Vector3 (0f, this.GetComponent<Rigidbody> ().velocity.y, 0f);
 
 		if (active) {
-			if (HP <= 0 || this.transform.position.x < -25f || this.transform.position.y < -10f) {
+			if (HP <= 0 || this.transform.position.x < -20f || this.transform.position.y < -5f) {
 				try {
 					GameObject.Find ("Main Camera W1").GetComponent<AudioSource> ().mute = true;
 					GameObject.Find ("Main Camera M1").GetComponent<AudioSource> ().mute = true;
 				} catch (System.NullReferenceException) {
 				}
-				PlataformGenerator.GameOver.SetActive (true);
+				God.GameOver ("Meddler");
 			}
 
 			rigidBody.AddForce (Vector3.down * JumpSpeed);
@@ -186,7 +186,7 @@ public class PlayerController : MonoBehaviour
 	void OnTriggerEnter (Collider other)
 	{
 		if (shield) {
-			if (other.gameObject.GetComponent<Monster> ()) {		
+			if (other.gameObject.tag == "Monster") {
 				other.gameObject.GetComponent<Monster> ().HP = 0;
 			}
 		} else {

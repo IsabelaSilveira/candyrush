@@ -24,9 +24,7 @@ public class GameMaster : MonoBehaviour
 	void Update ()
 	{
 		if (obstaculos <= 0) {
-			PlataformGenerator.GameOver.SetActive (true);
-			PlataformGenerator.GameOver.transform.rotation = Quaternion.Euler(new Vector3 (0f,90f,0f));
-			PlataformGenerator.GameOver.transform.position = new Vector3 (PlataformGenerator.GameOver.transform.position.x, PlataformGenerator.GameOver.transform.position.y, -7.2f);
+			God.GameOver ("Walker");
 		}
 	}
 

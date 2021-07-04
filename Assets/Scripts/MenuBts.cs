@@ -9,7 +9,12 @@ public class MenuBts : MonoBehaviour
 
 	public void Jogar ()
 	{
-		SceneManager.LoadScene (scenePlay);
+		GameObject loading = Instantiate (Resources.Load ("loading") as GameObject);
+		loading.transform.SetParent (GameObject.FindObjectOfType<Canvas>().transform);
+		loading.transform.localRotation = Quaternion.identity;
+		loading.transform.localPosition = Vector2.zero;
+		loading.transform.localScale = Vector2.one;
+		SceneManager.LoadSceneAsync (scenePlay);
 	}
 
 	public void OpenPanel (string panel){
@@ -23,5 +28,9 @@ public class MenuBts : MonoBehaviour
 		GameObject.Find ("Tutorial").SetActive (false);
 		GameObject.Find ("Créditos").SetActive (false);
 		GameObject.Find ("Controles").SetActive (false);
+	}
+
+	public void Exit (){
+		Application.Quit ();
 	}
 }
